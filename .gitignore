@@ -1,0 +1,47 @@
+# Node
+node_modules/
+npm-debug.log
+*.log
+
+# COBOL compiled files
+*.o
+*.so
+*.exe
+financial-calc
+mainframe-sync
+legacy-auth
+transaction-stream
+
+# COBOL data files
+*.dat
+*.log
+
+# PHP/SuiteCRM
+/cache/*
+/upload/*
+/config_override.php
+/config.php
+*.log
+
+# Docker
+.env
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Build artifacts
+/build/
+/dist/
