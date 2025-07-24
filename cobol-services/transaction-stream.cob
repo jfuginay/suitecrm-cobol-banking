@@ -92,7 +92,7 @@
            05  DSP-AMOUNT          PIC -$$,$$$,$$9.99.
            05  DSP-BALANCE         PIC -$$$,$$$,$$9.99.
            05  DSP-DATE            PIC 9999/99/99.
-           05  DSP-TIME            PIC 99:99:99.
+           05  DSP-TIME            PIC 99B99B99.
        
        01  WS-REALTIME-FLAGS.
            05  WS-NEW-TRANS        PIC X VALUE 'N'.

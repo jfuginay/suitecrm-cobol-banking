@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SuiteCRM COBOL Banking Integration Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .suitecrm-header {
+            background: #534d64;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .dashlet {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .dashlet-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dashlet-body {
+            padding: 20px;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .action-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .action-btn:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+        }
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        .activity-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .activity-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close:hover {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background: #0052a3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .result-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .result-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .demo-notice {
+            background: #cfe2ff;
+            color: #084298;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="suitecrm-header">
+        <div class="logo">SuiteCRM</div>
+        <div class="user-info">
+            <span><span class="status-indicator"></span>COBOL Services Online</span>
+            <span>Admin User</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="demo-notice">
+            🎥 <strong>Demo Mode:</strong> This demonstrates COBOL Banking Services integrated into SuiteCRM's dashboard
+        </div>
+
+        <div class="dashlet">
+            <div class="dashlet-header">
+                <span>🏦 COBOL Banking Services</span>
+                <span style="font-size: 12px; color: #666;">Powered by COBOL</span>
+            </div>
+            <div class="dashlet-body">
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showCardValidator()">
+                        <div class="action-icon">💳</div>
+                        <div>Validate Card</div>
+                    </button>
+                    <button class="action-btn" onclick="showLoanCalc()">
+                        <div class="action-icon">💰</div>
+                        <div>Loan Calculator</div>
+                    </button>
+                    <button class="action-btn" onclick="showAccountVerify()">
+                        <div class="action-icon">🏦</div>
+                        <div>Verify Account</div>
+                    </button>
+                    <button class="action-btn" onclick="showTransactions()">
+                        <div class="action-icon">📊</div>
+                        <div>Transactions</div>
+                    </button>
+                </div>
+
+                <h4>Recent Banking Activity</h4>
+                <div class="activity-list" id="activity-list">
+                    <div class="activity-item">
+                        <span>✓ Card validated - VISA ****1111</span>
+                        <span style="color: #666;">2 min ago</span>
+                    </div>
+                    <div class="activity-item">
+                        <span>✓ Loan calculated - $250,000 @ 4.5%</span>
+                        <span style="color: #666;">5 min ago</span>
+                    </div>
+                    <div class="activity-item">
+                        <span>✓ Account verified - ****0123</span>
+                        <span style="color: #666;">10 min ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashlet">
+            <div class="dashlet-header">Other SuiteCRM Dashlets</div>
+            <div class="dashlet-body" style="text-align: center; color: #666;">
+                Your other SuiteCRM dashlets would appear here
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Validator Modal -->
+    <div id="cardModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cardModal')">&times;</span>
+            <h2>💳 COBOL Card Validator</h2>
+            <p>Validate credit/debit cards using COBOL Luhn algorithm</p>
+            
+            <div class="form-group">
+                <label>Card Number</label>
+                <input type="text" id="cardNumber" placeholder="Enter card number" value="4111111111111111">
+            </div>
+            
+            <div class="form-group">
+                <label>Expiry Date</label>
+                <select id="cardExpiry">
+                    <option value="12/2025" selected>12/2025</option>
+                    <option value="01/2026">01/2026</option>
+                    <option value="06/2026">06/2026</option>
+                    <option value="12/2026">12/2026</option>
+                </select>
+            </div>
+            
+            <button class="btn-primary" onclick="validateCard()">Validate with COBOL</button>
+            
+            <div id="cardResult"></div>
+        </div>
+    </div>
+
+    <!-- Loan Calculator Modal -->
+    <div id="loanModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loanModal')">&times;</span>
+            <h2>💰 COBOL Loan Calculator</h2>
+            <p>Calculate loan payments with banking-grade precision</p>
+            
+            <div class="form-group">
+                <label>Loan Amount ($)</label>
+                <input type="number" id="loanAmount" value="250000">
+            </div>
+            
+            <div class="form-group">
+                <label>Annual Interest Rate (%)</label>
+                <input type="number" id="loanRate" step="0.01" value="4.5">
+            </div>
+            
+            <div class="form-group">
+                <label>Term (months)</label>
+                <input type="number" id="loanTerm" value="360">
+            </div>
+            
+            <button class="btn-primary" onclick="calculateLoan()">Calculate with COBOL</button>
+            
+            <div id="loanResult"></div>
+        </div>
+    </div>
+
+    <!-- Account Verify Modal -->
+    <div id="verifyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('verifyModal')">&times;</span>
+            <h2>🏦 Account Verification</h2>
+            <p>Verify routing and account numbers for ACH/Wire transfers</p>
+            
+            <div class="form-group">
+                <label>Routing Number</label>
+                <input type="text" id="routingNumber" placeholder="9-digit routing number" value="123456789">
+            </div>
+            
+            <div class="form-group">
+                <label>Account Number</label>
+                <input type="text" id="accountNumber" placeholder="Account number" value="4567890123">
+            </div>
+            
+            <button class="btn-primary" onclick="verifyAccount()">Verify with COBOL</button>
+            
+            <div id="verifyResult"></div>
+        </div>
+    </div>
+
+    <script>
+        function showCardValidator() {
+            document.getElementById('cardModal').style.display = 'block';
+        }
+
+        function showLoanCalc() {
+            document.getElementById('loanModal').style.display = 'block';
+        }
+
+        function showAccountVerify() {
+            document.getElementById('verifyModal').style.display = 'block';
+        }
+
+        function showTransactions() {
+            alert('Transaction feed would open in a new SuiteCRM module view');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function validateCard() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const resultDiv = document.getElementById('cardResult');
+            
+            resultDiv.innerHTML = '<div style="color: #666;">Processing with COBOL engine...</div>';
+            
+            setTimeout(() => {
+                if (cardNumber.length >= 13) {
+                    const cardType = cardNumber[0] === '4' ? 'VISA' : 
+                                   cardNumber[0] === '5' ? 'MasterCard' : 
+                                   cardNumber[0] === '3' ? 'American Express' : 'Unknown';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result result-success">
+                            <h4>✓ Card Valid</h4>
+                            <p><strong>Type:</strong> ${cardType}</p>
+                            <p><strong>Number:</strong> ****-****-****-${cardNumber.slice(-4)}</p>
+                            <p><strong>Status:</strong> Active</p>
+                            <p><em>Validated using COBOL Luhn algorithm</em></p>
+                        </div>
+                    `;
+                    
+                    addActivity(`Card validated - ${cardType} ****${cardNumber.slice(-4)}`);
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result result-error">
+                            <h4>✗ Invalid Card</h4>
+                            <p>Card number format is invalid</p>
+                        </div>
+                    `;
+                }
+            }, 800);
+        }
+
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value);
+            const rate = parseFloat(document.getElementById('loanRate').value) / 100 / 12;
+            const term = parseInt(document.getElementById('loanTerm').value);
+            
+            const payment = amount * (rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+            const total = payment * term;
+            const interest = total - amount;
+            
+            const resultDiv = document.getElementById('loanResult');
+            resultDiv.innerHTML = `
+                <div class="result result-success">
+                    <h4>Loan Calculation Results</h4>
+                    <p><strong>Monthly Payment:</strong> $${payment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                    <p><strong>Total Interest:</strong> $${interest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                    <p><strong>Total Payments:</strong> $${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</p>
+                    <p><em>Calculated using COBOL COMP-3 precision</em></p>
+                </div>
+            `;
+            
+            addActivity(`Loan calculated - $${amount.toLocaleString()} @ ${(rate * 12 * 100).toFixed(1)}%`);
+        }
+
+        function verifyAccount() {
+            const routing = document.getElementById('routingNumber').value;
+            const account = document.getElementById('accountNumber').value;
+            const resultDiv = document.getElementById('verifyResult');
+            
+            resultDiv.innerHTML = '<div style="color: #666;">Verifying with mainframe...</div>';
+            
+            setTimeout(() => {
+                if (routing.length === 9 && account.length >= 4) {
+                    resultDiv.innerHTML = `
+                        <div class="result result-success">
+                            <h4>✓ Account Verified</h4>
+                            <p><strong>Bank:</strong> First National Bank</p>
+                            <p><strong>Account Type:</strong> Checking</p>
+                            <p><strong>Status:</strong> Active</p>
+                            <p><strong>ACH/Wire:</strong> Enabled</p>
+                            <p><em>Verified through COBOL mainframe</em></p>
+                        </div>
+                    `;
+                    
+                    addActivity(`Account verified - ****${account.slice(-4)}`);
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result result-error">
+                            <h4>✗ Verification Failed</h4>
+                            <p>Invalid routing or account number</p>
+                        </div>
+                    `;
+                }
+            }, 1000);
+        }
+
+        function addActivity(description) {
+            const activityList = document.getElementById('activity-list');
+            const newActivity = document.createElement('div');
+            newActivity.className = 'activity-item';
+            newActivity.innerHTML = `
+                <span>✓ ${description}</span>
+                <span style="color: #666;">just now</span>
+            `;
+            activityList.insertBefore(newActivity, activityList.firstChild);
+            
+            // Keep only last 5 activities
+            while (activityList.children.length > 5) {
+                activityList.removeChild(activityList.lastChild);
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

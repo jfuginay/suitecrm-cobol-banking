@@ -45,7 +45,7 @@
            05  INTEREST-RATE       PIC 9(2)V9(4) COMP-3.
            05  OPEN-DATE           PIC 9(8).
            05  LAST-ACTIVITY       PIC 9(8).
-           05  STATUS              PIC X(10).
+           05  ACCT-STATUS         PIC X(10).
        
        FD  TRANSACTION-LOG.
        01  TRANSACTION-RECORD.
@@ -250,7 +250,7 @@
                '"balance":"' DSP-BALANCE '",'
                '"availableBalance":"' DSP-AMOUNT '",'
                '"interestRate":' INTEREST-RATE ','
-               '"status":"' STATUS OF ACCOUNT-RECORD '"'
+               '"status":"' ACCT-STATUS OF ACCOUNT-RECORD '"'
                '}'
                DELIMITED BY SIZE 
                INTO WS-JSON-OUTPUT
@@ -282,7 +282,7 @@
                '"balance":"' DSP-BALANCE '",'
                '"availableBalance":"' DSP-AMOUNT '",'
                '"lastActivity":"' LAST-ACTIVITY '",'
-               '"status":"' STATUS OF ACCOUNT-RECORD '"'
+               '"status":"' ACCT-STATUS OF ACCOUNT-RECORD '"'
                '}'
                DELIMITED BY SIZE INTO WS-JSON-OUTPUT
            

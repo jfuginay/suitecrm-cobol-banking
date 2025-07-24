@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>COBOL Banking Dashboard - SuiteCRM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .suitecrm-header {
+            background: #534d64;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .dashlet {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .dashlet-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
+        }
+        .dashlet-content {
+            padding: 20px;
+        }
+        .banking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .banking-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .banking-btn:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+        }
+        .icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            background: #d4edda;
+            color: #155724;
+        }
+        .activity {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        .activity-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 4px;
+            display: none;
+        }
+        .demo-notice {
+            background: #cfe2ff;
+            color: #084298;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="suitecrm-header">
+        <h1>SuiteCRM</h1>
+        <div>
+            <span class="status">🟢 COBOL Services Online</span>
+            <span style="margin-left: 20px;">Admin User</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="demo-notice">
+            <strong>Demo Mode:</strong> This shows how COBOL Banking Services appears in your SuiteCRM dashboard
+        </div>
+
+        <div class="dashlet">
+            <div class="dashlet-header">
+                🏦 COBOL Banking Services
+            </div>
+            <div class="dashlet-content">
+                <div class="banking-grid">
+                    <button class="banking-btn" onclick="openService('card')">
+                        <div class="icon">💳</div>
+                        <div>Card Validator</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Validate cards</div>
+                    </button>
+                    
+                    <button class="banking-btn" onclick="openService('loan')">
+                        <div class="icon">💰</div>
+                        <div>Loan Calculator</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Calculate payments</div>
+                    </button>
+                    
+                    <button class="banking-btn" onclick="openService('verify')">
+                        <div class="icon">🏦</div>
+                        <div>Account Verify</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Check routing</div>
+                    </button>
+                    
+                    <button class="banking-btn" onclick="openService('demo')">
+                        <div class="icon">📊</div>
+                        <div>Full Demo</div>
+                        <div style="font-size: 12px; margin-top: 5px;">All features</div>
+                    </button>
+                </div>
+
+                <h4>Recent Banking Activity</h4>
+                <div class="activity">
+                    <div class="activity-item">✓ Card validated - VISA ****1111</div>
+                    <div class="activity-item">✓ Loan calculated - $250,000 @ 4.5%</div>
+                    <div class="activity-item">✓ Account verified - ****0123</div>
+                </div>
+            </div>
+        </div>
+
+        <iframe id="serviceFrame"></iframe>
+    </div>
+
+    <script>
+        function openService(service) {
+            const frame = document.getElementById('serviceFrame');
+            frame.style.display = 'block';
+            
+            switch(service) {
+                case 'card':
+                    frame.src = 'card_validator_simple.html';
+                    break;
+                case 'loan':
+                    frame.src = 'loan_calculator_simple.html';
+                    break;
+                case 'verify':
+                    frame.src = 'account_verify_simple.html';
+                    break;
+                case 'demo':
+                    frame.src = 'banking_demo.html';
+                    break;
+            }
+            
+            frame.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

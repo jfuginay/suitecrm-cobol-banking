@@ -1,0 +1,281 @@
+/**
+ * Real-time Validation Styles
+ * Visual feedback for COBOL-powered field validation
+ */
+
+/* Field validation states */
+input.validation-error,
+select.validation-error,
+textarea.validation-error {
+    border: 2px solid #e74c3c !important;
+    background-color: #fee;
+}
+
+input.validation-success,
+select.validation-success,
+textarea.validation-success {
+    border: 2px solid #27ae60 !important;
+    background-color: #f0fff0;
+}
+
+input.validation-warning,
+select.validation-warning,
+textarea.validation-warning {
+    border: 2px solid #f39c12 !important;
+    background-color: #fffacd;
+}
+
+/* Loading indicator */
+.validation-loader {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: validation-spin 1s linear infinite;
+}
+
+@keyframes validation-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Validation messages */
+.validation-message {
+    display: block;
+    margin-top: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.validation-error-message {
+    background-color: #fee;
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+}
+
+.validation-warning-message {
+    background-color: #fff8dc;
+    color: #d68910;
+    border: 1px solid #f39c12;
+}
+
+.validation-success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Validation status bar */
+#validation-status-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background: #bdc3c7;
+}
+
+.status-indicator.connected {
+    background: #27ae60;
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.disconnected {
+    background: #f39c12;
+}
+
+.status-indicator.error {
+    background: #e74c3c;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+    }
+}
+
+/* Validation summary */
+#validation-summary {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+#validation-summary h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+#validation-summary ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+
+#validation-summary li {
+    margin-bottom: 5px;
+}
+
+/* Field with validation indicator */
+.has-validation {
+    position: relative;
+    padding-right: 30px;
+}
+
+.has-validation::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+}
+
+.has-validation.validation-success::after {
+    content: '✓';
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.has-validation.validation-error::after {
+    content: '✗';
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Rule configuration form */
+.rule-config-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.rule-config-form .form-group {
+    margin-bottom: 15px;
+}
+
+.rule-config-form label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.rule-config-form input,
+.rule-config-form select,
+.rule-config-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+/* Rule priority indicator */
+.priority-indicator {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.priority-high {
+    background: #e74c3c;
+    color: white;
+}
+
+.priority-medium {
+    background: #f39c12;
+    color: white;
+}
+
+.priority-low {
+    background: #3498db;
+    color: white;
+}
+
+/* Rule list table */
+.rules-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.rules-list-table th {
+    background: #ecf0f1;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+.rules-list-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.rules-list-table tr:hover {
+    background: #f8f9fa;
+}
+
+.rule-active {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.rule-inactive {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    #validation-status-bar {
+        bottom: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: 6px 12px;
+    }
+    
+    .validation-message {
+        font-size: 11px;
+    }
+    
+    .rules-list-table {
+        font-size: 12px;
+    }
+    
+    .rules-list-table th,
+    .rules-list-table td {
+        padding: 8px;
+    }
+}

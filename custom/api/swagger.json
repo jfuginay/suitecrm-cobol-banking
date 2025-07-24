@@ -1,0 +1,616 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SuiteCRM COBOL Service API",
+    "description": "REST API for COBOL-powered banking features in SuiteCRM",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "api-support@suitecrm-cobol.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://your-instance.com/api/v1/cobol",
+      "description": "Production server"
+    },
+    {
+      "url": "https://sandbox.your-instance.com/api/v1/cobol",
+      "description": "Sandbox server"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    },
+    {
+      "apiKey": []
+    }
+  ],
+  "paths": {
+    "/calculate": {
+      "post": {
+        "summary": "Execute Financial Calculation",
+        "description": "Perform COBOL-powered financial calculations with banking precision",
+        "operationId": "calculate",
+        "tags": ["Calculations"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculation successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validate": {
+      "post": {
+        "summary": "Validate Field Value",
+        "description": "Validate field using COBOL business rules engine",
+        "operationId": "validate",
+        "tags": ["Validation"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validation complete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/import": {
+      "post": {
+        "summary": "Import Legacy Data",
+        "description": "Import data from mainframe systems with EBCDIC conversion",
+        "operationId": "importData",
+        "tags": ["Import/Export"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Import successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/export": {
+      "post": {
+        "summary": "Export Data to Legacy Format",
+        "description": "Export SuiteCRM data to legacy mainframe format",
+        "operationId": "exportData",
+        "tags": ["Import/Export"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Export successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report": {
+      "post": {
+        "summary": "Generate Report",
+        "description": "Generate report using COBOL processing engine",
+        "operationId": "generateReport",
+        "tags": ["Reports"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report generation started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch/submit": {
+      "post": {
+        "summary": "Submit Batch Job",
+        "description": "Submit batch job for COBOL processing",
+        "operationId": "submitBatchJob",
+        "tags": ["Batch Jobs"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchJobRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Job submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchJobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch/status/{jobId}": {
+      "get": {
+        "summary": "Get Batch Job Status",
+        "description": "Get status of a batch job",
+        "operationId": "getBatchStatus",
+        "tags": ["Batch Jobs"],
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchJobStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Check COBOL service health",
+        "operationId": "healthCheck",
+        "tags": ["System"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "apiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "schemas": {
+      "CalculationRequest": {
+        "type": "object",
+        "required": ["type", "parameters"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "LOAN-PAYMENT",
+              "COMPOUND-INTEREST",
+              "AMORTIZATION",
+              "ROI-CALCULATOR",
+              "MORTGAGE-CALCULATOR",
+              "CURRENCY-CONVERSION",
+              "RISK-ASSESSMENT",
+              "TAX-CALCULATION"
+            ]
+          },
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "principal": {
+                "type": "number",
+                "format": "double"
+              },
+              "rate": {
+                "type": "number",
+                "format": "double"
+              },
+              "term_years": {
+                "type": "integer"
+              },
+              "frequency": {
+                "type": "string",
+                "enum": ["monthly", "quarterly", "annually"]
+              }
+            }
+          },
+          "currency": {
+            "type": "string",
+            "default": "USD"
+          }
+        }
+      },
+      "CalculationResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "calculation_id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object"
+          },
+          "execution_time": {
+            "type": "number",
+            "format": "double"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationRequest": {
+        "type": "object",
+        "required": ["module", "field", "value"],
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "record": {
+            "type": "object"
+          }
+        }
+      },
+      "ValidationResponse": {
+        "type": "object",
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ImportRequest": {
+        "type": "object",
+        "required": ["bridge_type", "data"],
+        "properties": {
+          "bridge_type": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER-MASTER",
+              "ACCOUNT-LEDGER",
+              "TRANSACTION-LOG",
+              "CUSTOM"
+            ]
+          },
+          "data": {
+            "type": "string",
+            "format": "byte",
+            "description": "Base64 encoded data"
+          },
+          "source_format": {
+            "type": "string",
+            "enum": ["FIXED_LENGTH", "VARIABLE_LENGTH", "VSAM"]
+          },
+          "copybook": {
+            "type": "string"
+          },
+          "field_mappings": {
+            "type": "object"
+          }
+        }
+      },
+      "ImportResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "bridge_id": {
+            "type": "string"
+          },
+          "records_processed": {
+            "type": "integer"
+          },
+          "records_failed": {
+            "type": "integer"
+          }
+        }
+      },
+      "ExportRequest": {
+        "type": "object",
+        "required": ["module", "bridge_type"],
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "bridge_type": {
+            "type": "string"
+          },
+          "target_format": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "object"
+          },
+          "field_mappings": {
+            "type": "object"
+          }
+        }
+      },
+      "ExportResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "string",
+            "format": "byte"
+          },
+          "format": {
+            "type": "string"
+          },
+          "encoding": {
+            "type": "string"
+          },
+          "records_exported": {
+            "type": "integer"
+          }
+        }
+      },
+      "ReportRequest": {
+        "type": "object",
+        "required": ["report_type"],
+        "properties": {
+          "report_type": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["pdf", "excel", "csv", "json", "html"]
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "return_data": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "ReportResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "report_id": {
+            "type": "string"
+          },
+          "download_url": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string",
+            "format": "byte"
+          }
+        }
+      },
+      "BatchJobRequest": {
+        "type": "object",
+        "required": ["job_type"],
+        "properties": {
+          "job_type": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          }
+        }
+      },
+      "BatchJobResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "queue_position": {
+            "type": "integer"
+          },
+          "estimated_start": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BatchJobStatus": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "running", "completed", "failed"]
+          },
+          "progress": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }
+      },
+      "HealthStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "degraded", "unhealthy"]
+          },
+          "services": {
+            "type": "object"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

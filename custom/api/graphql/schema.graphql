@@ -1,0 +1,311 @@
+"""
+COBOL Service GraphQL Schema
+Provides modern GraphQL interface to COBOL banking services
+"""
+
+scalar DateTime
+scalar JSON
+
+type Query {
+  # Financial Calculations
+  calculate(input: CalculationInput!): CalculationResult!
+  getCalculationHistory(limit: Int = 10, offset: Int = 0): CalculationHistoryResult!
+  
+  # Validation
+  validateField(input: ValidationInput!): ValidationResult!
+  getValidationRules(module: String!): [ValidationRule!]!
+  
+  # Reports
+  getReport(id: ID!): Report
+  listReports(filter: ReportFilter): ReportList!
+  getDashboardData(dateRange: String!): DashboardData!
+  
+  # Batch Jobs
+  getBatchJob(id: ID!): BatchJob
+  listBatchJobs(filter: BatchJobFilter): BatchJobList!
+  getJobQueueStatus: QueueStatus!
+  
+  # System
+  healthCheck: HealthStatus!
+  getTransactionStream(limit: Int = 100): TransactionStream!
+}
+
+type Mutation {
+  # Calculations
+  executeCalculation(input: CalculationInput!): CalculationResult!
+  
+  # Import/Export
+  importLegacyData(input: ImportInput!): ImportResult!
+  exportData(input: ExportInput!): ExportResult!
+  
+  # Reports
+  generateReport(input: ReportInput!): ReportResult!
+  scheduleReport(input: ScheduleReportInput!): Report!
+  
+  # Batch Jobs
+  submitBatchJob(input: BatchJobInput!): BatchJobResult!
+  pauseBatchJob(id: ID!): BatchJob!
+  stopBatchJob(id: ID!): BatchJob!
+  
+  # Validation Rules
+  createValidationRule(input: ValidationRuleInput!): ValidationRule!
+  updateValidationRule(id: ID!, input: ValidationRuleInput!): ValidationRule!
+  deleteValidationRule(id: ID!): Boolean!
+}
+
+type Subscription {
+  # Real-time updates
+  transactionAdded: Transaction!
+  batchJobStatusChanged(jobId: ID!): BatchJob!
+  reportCompleted(userId: ID!): Report!
+  validationFailed: ValidationEvent!
+}
+
+# Input Types
+input CalculationInput {
+  type: CalculationType!
+  parameters: JSON!
+  currency: String
+}
+
+input ValidationInput {
+  module: String!
+  field: String!
+  value: String!
+  record: JSON
+}
+
+input ImportInput {
+  bridgeType: BridgeType!
+  data: String! # Base64 encoded
+  sourceFormat: SourceFormat!
+  copybook: String
+  fieldMappings: JSON
+  options: ImportOptions
+}
+
+input ExportInput {
+  module: String!
+  bridgeType: BridgeType!
+  targetFormat: SourceFormat!
+  filters: JSON
+  fieldMappings: JSON
+}
+
+input ReportInput {
+  type: ReportType!
+  format: ReportFormat!
+  parameters: JSON
+  returnData: Boolean
+}
+
+input BatchJobInput {
+  type: JobType!
+  name: String
+  parameters: JSON
+  priority: Int
+  schedule: String
+}
+
+# Output Types
+type CalculationResult {
+  success: Boolean!
+  calculationId: ID
+  result: JSON
+  executionTime: Float
+  error: String
+}
+
+type ValidationResult {
+  valid: Boolean!
+  errors: [ValidationError!]
+  warnings: [ValidationWarning!]
+}
+
+type ImportResult {
+  success: Boolean!
+  bridgeId: ID
+  recordsProcessed: Int!
+  recordsFailed: Int!
+  details: [ImportDetail!]
+  error: String
+}
+
+type Report {
+  id: ID!
+  name: String!
+  type: ReportType!
+  format: ReportFormat!
+  status: ReportStatus!
+  createdAt: DateTime!
+  completedAt: DateTime
+  downloadUrl: String
+  chartData: JSON
+}
+
+type BatchJob {
+  id: ID!
+  name: String!
+  type: JobType!
+  status: JobStatus!
+  progress: Int!
+  priority: Int!
+  createdAt: DateTime!
+  startedAt: DateTime
+  completedAt: DateTime
+  runCount: Int!
+  successCount: Int!
+  failureCount: Int!
+  averageRuntime: Float
+  nextRun: DateTime
+  lastError: String
+}
+
+type Transaction {
+  id: ID!
+  timestamp: DateTime!
+  type: TransactionType!
+  amount: Float!
+  account: String!
+  description: String
+  status: TransactionStatus!
+}
+
+# Enums
+enum CalculationType {
+  LOAN_PAYMENT
+  COMPOUND_INTEREST
+  AMORTIZATION
+  ROI_CALCULATOR
+  MORTGAGE_CALCULATOR
+  CURRENCY_CONVERSION
+  RISK_ASSESSMENT
+  TAX_CALCULATION
+}
+
+enum BridgeType {
+  CUSTOMER_MASTER
+  ACCOUNT_LEDGER
+  TRANSACTION_LOG
+  PRODUCT_CATALOG
+  EMPLOYEE_RECORDS
+  CUSTOM
+}
+
+enum SourceFormat {
+  FIXED_LENGTH
+  VARIABLE_LENGTH
+  VSAM
+  SEQUENTIAL
+  EBCDIC
+  ASCII
+}
+
+enum ReportType {
+  FINANCIAL_SUMMARY
+  TRANSACTION_ANALYSIS
+  COMPLIANCE_REPORT
+  CUSTOMER_ANALYTICS
+  RISK_ASSESSMENT
+  REGULATORY_FILING
+  PERFORMANCE_METRICS
+  CUSTOM_REPORT
+}
+
+enum ReportFormat {
+  PDF
+  EXCEL
+  CSV
+  JSON
+  HTML
+}
+
+enum JobType {
+  DATA_RECONCILIATION
+  REPORT_GENERATION
+  ACCOUNT_PROCESSING
+  TRANSACTION_BATCH
+  MAINTENANCE_CLEANUP
+  DATA_EXPORT
+  COMPLIANCE_CHECK
+  CUSTOM_BATCH
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  PAUSED
+  CANCELLED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+  PAYMENT
+  FEE
+  INTEREST
+  ADJUSTMENT
+}
+
+# Supporting Types
+type ValidationError {
+  field: String!
+  message: String!
+  code: String
+}
+
+type ValidationWarning {
+  field: String!
+  message: String!
+  code: String
+}
+
+type ValidationRule {
+  id: ID!
+  name: String!
+  module: String!
+  field: String!
+  type: String!
+  condition: String!
+  message: String!
+  active: Boolean!
+  priority: Int!
+}
+
+type ImportDetail {
+  recordNumber: Int!
+  status: String!
+  error: String
+}
+
+type QueueStatus {
+  running: Int!
+  queued: Int!
+  scheduled: Int!
+  failed: Int!
+  maxConcurrent: Int!
+  capacityUsed: Float!
+}
+
+type HealthStatus {
+  status: String!
+  services: JSON!
+  timestamp: DateTime!
+}
+
+type TransactionStream {
+  transactions: [Transaction!]!
+  count: Int!
+  since: DateTime!
+  streamUrl: String!
+}
+
+type DashboardData {
+  metrics: JSON!
+  charts: JSON!
+  recentReports: [Report!]!
+  activeJobs: [BatchJob!]!
+}

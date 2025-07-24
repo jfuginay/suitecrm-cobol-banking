@@ -90,9 +90,9 @@
                10  WS-USER-DOMAIN  PIC X(30).
        
        01  WS-LDAP-CONFIG.
-           05  LDAP-SERVER         PIC X(50) VALUE "ldap.mainframe.bank".
-           05  LDAP-PORT           PIC 9(5) VALUE 389.
-           05  LDAP-BASE-DN        PIC X(100) VALUE "dc=bank,dc=com".
+           05  LDAP-SERVER         PIC X(50).
+           05  LDAP-PORT           PIC 9(5).
+           05  LDAP-BASE-DN        PIC X(100).
            05  LDAP-BIND-DN        PIC X(100).
        
        01  WS-JSON-BUILDER.
@@ -112,6 +112,10 @@
            OPEN I-O USER-MASTER
            OPEN I-O TOKEN-STORE
            OPEN EXTEND AUDIT-LOG
+           
+           MOVE "ldap.mainframe.bank" TO LDAP-SERVER
+           MOVE 389 TO LDAP-PORT
+           MOVE "dc=bank,dc=com" TO LDAP-BASE-DN
            
            ACCEPT WS-CURRENT-TIME FROM DATE YYYYMMDD
            ACCEPT WS-CURRENT-TIME FROM TIME
@@ -230,10 +234,10 @@
            WRITE TOKEN-RECORD.
        
        GENERATE-RANDOM-TOKEN.
-           MOVE FUNCTION RANDOM(FUNCTION CURRENT-DATE) TO WS-RANDOM-TOKEN
-           INSPECT WS-RANDOM-TOKEN CONVERTING " " TO "X"
+           MOVE FUNCTION CURRENT-DATE TO WS-CURRENT-TIME
            STRING WS-CURRENT-TIME USERNAME DELIMITED BY SIZE
-               INTO WS-RANDOM-TOKEN.
+               INTO WS-RANDOM-TOKEN
+           INSPECT WS-RANDOM-TOKEN CONVERTING " " TO "X".
        
        CREATE-SESSION.
            MOVE USERNAME TO WS-USER-NAME
